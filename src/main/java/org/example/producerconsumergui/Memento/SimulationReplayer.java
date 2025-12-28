@@ -34,10 +34,10 @@ public class SimulationReplayer {
         if (isPaused || currentEvent >= simulationEvents.size())
             return null;
         SimulationEvent event = simulationEvents.get(currentEvent);
-        long eventOriginalTime = event.getTimestamp() - replayStartTime;
+        long eventOriginalTime = event.getTimestamp() - recordingstartTime;
         long adjustedTime = (long) (eventOriginalTime / replaySpeed);
 
-        long currentTime = event.getTimestamp() - replayStartTime - totalPausedTime;
+        long currentTime = System.currentTimeMillis() - replayStartTime - totalPausedTime;
         if (currentTime >= adjustedTime) {
             currentEvent++;
             return event;
@@ -46,6 +46,7 @@ public class SimulationReplayer {
         return null;
 
     }
+
     public SimulationEvent peekNext(){
         if (currentEvent >= simulationEvents.size())
             return null;
@@ -67,7 +68,7 @@ public class SimulationReplayer {
     public void resumeReplay() {
         if (isPaused) {
             isPaused = false;
-            totalPausedTime = System.currentTimeMillis() - pauseStartTime;
+            totalPausedTime += System.currentTimeMillis() - pauseStartTime;
         }
     }
 
